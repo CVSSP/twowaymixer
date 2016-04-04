@@ -9,8 +9,9 @@
  */
 
 var fs = require("fs");
-var convnetjs = require("../common/convnet.js");
 var JSONStream = require('JSONStream');
+var convnetjs = require("../common/convnet.js");
+
 
 var nIter = 10;
 var ftrSize = 513;

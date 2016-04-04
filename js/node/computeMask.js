@@ -9,9 +9,10 @@
  */
 
 var fs = require("fs");
+var WavDecoder = require("wav-decoder");
 var stftjs = require("../common/stft.js");
 var dsp = require("../common/dsp.js");
-var WavDecoder = require("wav-decoder");
+
 var audioSamples;
 var stft = new stftjs.stft(1024, 1024, 512, 44100);
 
