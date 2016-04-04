@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Two-way mixer</title>
+    <!-- css -->
+    <link rel="stylesheet"
+          href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" > 
+    <link rel="stylesheet" href="css/bootstrap-slider.css" > 
+    <link rel="stylesheet" href="css/throbber.css">
+    <!-- js -->
+    <script 
+          src="//code.jquery.com/jquery-1.10.2.js">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script 
+          src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js">
+    </script> 
+    <script src="js/browser/bootstrap-slider.js"></script>
+    <script src="js/browser/TwoWayMixer.js"></script>
+    <script src="js/browser/TwoWayMixerUI.js"></script>
+    <script src="js/common/dsp.js"></script>
+    <script src="js/common/convnet.js"></script>
+    <script src="js/common/stft.js"></script>
+    <script>
+    $(function() {
+      window.AudioContext = window.AudioContext|| window.webkitAudioContext;
+      var twm = new TwoWayMixer(44100,1024,16);
+          });
+    </script>
+<style>
+
+body{
+  padding: 100px;
+  font-size: 10px;
+  background: #999;
+}
+#track_name{ 
+  padding:10px;
+}
+.fader{
+  margin-left: 5px;
+}
+
+.slider-handle {
+  background: gray;
+}
+#tip{
+height:50px
+}
+
+#track_selection{
+height:100px
+}
+#scope{
+border:1px solid black;
+}
+canvas{
+  margin-bottom:20px;
+}
+</style>
+  </head>
+  <body>
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" 
+                        data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Two-way mixer</a>
+                </div>
+            </div>
+  </nav>
+<!--div class="row" >
+  <div class="col-lg-4">
+<canvas id="scope" width="320" height="180"></canvas>
+</div>
+<div class="col-lg-8"></div>
+</div-->
+  <div class="row" >
+    <div class="col-lg-1">
+        <input id="vocals_slider" type="text" class="fader"
+          data-slider-min="0" 
+          data-slider-max="2" 
+          data-slider-step="0.1" 
+          data-slider-value="1" 
+          data-slider-handle="square"
+          data-slider-orientation="vertical"/>
+          <br/>vocals<br/>
+          <div  style="margin-top:30px">
+            <div class="btn-group" data-toggle="buttons">
+              <button type="radio" class="btn btn-default active" id="vocals_disabled"
+                   data-toggle="tooltip"  data-placement="left" title="disable">
+                <span class="glyphicon glyphicon-remove-circle" >
+              </button>
+              <button type="radio" class="btn btn-default" id="vocals_enabled"
+                   data-toggle="tooltip"  data-placement="left" title="remix">
+                <span class="glyphicon glyphicon-ok-circle">
+              </button>
+            </div>
+          </div>
+    </div>
+    <div class="col-lg-1">
+        <input id="bass_slider" type="text" class="fader"
+          data-slider-min="0" 
+          data-slider-max="2" 
+          data-slider-step="0.1" 
+          data-slider-value="1" 
+          data-slider-handle="square"
+          data-slider-orientation="vertical"/>
+          <br/>bass<br/>
+          <div  style="margin-top:30px">
+            <div class="btn-group" data-toggle="buttons">
+             <button type="radio" class="btn btn-default active" id="bass_disabled"
+                     data-toggle="tooltip" data-placement="left" title="disable">
+                <span class="glyphicon glyphicon-remove-circle">
+              </button>
+             <button type="radio" class="btn btn-default" id="bass_enabled"
+                     data-toggle="tooltip" data-placement="left" title="remix">
+                <span class="glyphicon glyphicon-ok-circle">
+              </button>
+            </div>
+          </div>
+    </div>
+    <div class="col-lg-1">
+        <input id="drums_slider" type="text" class="fader"
+          data-slider-min="0" 
+          data-slider-max="2" 
+          data-slider-step="0.1" 
+          data-slider-value="1" 
+          data-slider-handle="square"
+          data-slider-orientation="vertical"/>
+          <br/>drums<br/>
+            <div style="margin-top:30px">
+              <div class="btn-group" data-toggle="buttons">
+               <button type="radio" class="btn btn-default active" id="drums_disabled"
+                       data-toggle="tooltip" data-placement="left" title="disable">
+                  <span class="glyphicon glyphicon-remove-circle"><br/>
+                </button>
+               <button type="radio" class="btn btn-default" id="drums_enabled"
+                       data-toggle="tooltip" data-placement="left" title="remix">
+                  <span class="glyphicon glyphicon-ok-circle">
+                </button>
+              </div>
+            </div>
+    </div>
+    <div class="col-lg-1">
+        <input id="threshold_slider" type="text" class="fader"
+          data-slider-min="0" 
+          data-slider-max="1" 
+          data-slider-step="0.05" 
+          data-slider-value="0.2" 
+          data-slider-handle="square"
+          data-slider-orientation="vertical"/>
+          <br/>threshold
+    </div>
+    <div class="col-lg-8">
+     </div>
+  </div>
+  <div class="row" >
+  <br/><br/><br/>
+  </div>
+    <div class="row" id="track_selection">
+    <div class="col-lg-2">
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Select an audio track
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="track">
+            <li><a href="#" data-target="examples/90.ogg">Example 1</a></li>
+            <li><a href="#" data-target="examples/91.ogg">Example 2</a></li>
+            <li><a href="#" data-target="examples/92.ogg">Example 3</a></li>
+            <li><a href="#" data-target="examples/93.ogg">Example 4</a></li>
+            <li><a href="#" data-target="examples/94.ogg">Example 5</a></li>
+            <li><a href="#" data-target="examples/95.ogg">Example 6</a></li>
+            <li><a href="#" data-target="examples/96.ogg">Example 7</a></li>
+            <li><a href="#" data-target="examples/97.ogg">Example 8</a></li>
+            <li><a href="#" data-target="examples/98.ogg">Example 9</a></li>
+            <li><a href="#" data-target="examples/99.ogg">Example 10</a></li>
+          </ul>
+      </div>
+    </div>
+    <div class="col-lg-1">
+      <button type="button" class="btn btn-default disabled" id="play_button" >
+              <span id="playback_icon" class="glyphicon glyphicon-play" >
+      </button>
+    </div>
+    <div class="col-lg-1" id="track_name">
+    </div>
+  </div>
+  <div class="row" style="height:100px;padding:20px" id="loading">
+    <div class="throbber-loader">
+  Loading...
+</div> &nbsp;&nbsp; Loading separation models
+</div>
+</body>
+</html>
