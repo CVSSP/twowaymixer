@@ -1,3 +1,14 @@
+/* stft.js
+ *
+ * Written by Gerard Roma
+ * Copyright (C) 2016 University of Surrey
+ * All rights reserved.
+ *
+ * This software may be modified and distributed under the terms
+ * of the BSD license. See the LICENSE file for details.
+ */
+
+
 if (typeof module !== 'undefined' && module.exports) {
     var _ = require("lodash");
     var dsp = require("../lib/dsp.js");

@@ -1,3 +1,13 @@
+/* computeMask.js
+ *
+ * Written by Gerard Roma
+ * Copyright (C) 2016 University of Surrey
+ * All rights reserved.
+ *
+ * This software may be modified and distributed under the terms
+ * of the BSD license.  See the LICENSE file for details.
+ */
+
 var fs = require("fs");
 var stftjs = require("../common/stft.js");
 var dsp = require("../common/dsp.js");
