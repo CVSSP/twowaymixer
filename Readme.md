@@ -5,7 +5,7 @@ An experimental prototype for remixing musical audio on web browsers. A neural n
 
 The data used for training the networks can be downloaded from the [SiSEC website](http://sisec.inria.fr/sisec-2015/2015-professionally-produced-music-recordings/).
 
-An online demo can be found [here](cvssp.org/projects/maruss/webmaruss/).
+An online demo can be found [here](http://cvssp.org/projects/maruss/webmaruss/).
 
 The software is distributed under BSD license. If you use it for academic work, please cite:
 
